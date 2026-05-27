@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NXT HOUSE — Lista VIP</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0a0a0a;
+  --white:#f5f5f5;
+  --yellow:#f5c518;
+  --gray:#1a1a1a;
+  --mid:#2a2a2a;
+  --text-dim:rgba(245,245,245,0.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow-x:hidden}
+body{background:var(--black);color:var(--white);font-family:'Barlow',sans-serif;min-height:100vh}
+
+/* ── NOISE TEXTURE ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
+
+/* ── DIAGONAL ACCENT ── */
+.diagonal{
+  position:fixed;top:0;right:0;width:45%;height:100%;z-index:0;
+  background:linear-gradient(135deg,transparent 40%,var(--gray) 40%);
+  pointer-events:none;
+}
+.diagonal::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    -45deg,transparent,transparent 8px,
+    rgba(245,197,24,0.03) 8px,rgba(245,197,24,0.03) 9px
+  );
+}
+
+/* ── LAYOUT ── */
+.wrap{
+  position:relative;z-index:1;min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;
+  max-width:1100px;margin:0 auto;
+}
+
+/* ── LEFT PANEL ── */
+.left{
+  padding:60px 48px 60px 40px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+
+/* ── LOGO ── */
+.logo{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:60px;
+}
+.logo-mark{
+  width:42px;height:42px;background:var(--yellow);
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-mark svg{width:22px;height:22px}
+.logo-text{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px;font-weight:900;letter-spacing:4px;
+  color:var(--white);
+}
+.logo-text span{color:var(--yellow)}
+
+/* ── BADGE ── */
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(245,197,24,0.3);
+  padding:6px 14px;margin-bottom:28px;width:fit-content;
+  font-size:10px;letter-spacing:3px;font-weight:600;
+  color:var(--yellow);text-transform:uppercase;
+}
+.badge-dot{width:6px;height:6px;background:var(--yellow);border-radius:50%;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+/* ── HEADLINE ── */
+.headline{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(64px,9vw,100px);
+  font-weight:900;line-height:0.9;
+  letter-spacing:-1px;
+  text-transform:uppercase;
+  margin-bottom:24px;
+}
+.headline .acc{
+  color:var(--yellow);
+  -webkit-text-stroke:0px;
+  display:block;
+}
+.headline .out{
+  -webkit-text-stroke:1px rgba(245,245,245,0.3);
+  color:transparent;
+  display:block;
+}
+
+/* ── BODY TEXT ── */
+.body-text{
+  font-size:15px;font-weight:300;
+  color:var(--text-dim);line-height:1.7;
+  max-width:360px;margin-bottom:40px;
+}
+.body-text strong{color:var(--white);font-weight:500}
+
+/* ── STATS ── */
+.stats{
+  display:flex;gap:32px;
+  margin-bottom:48px;
+  padding-top:32px;
+  border-top:1px solid var(--mid);
+}
+.stat-num{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:36px;font-weight:900;color:var(--yellow);
+  letter-spacing:-1px;line-height:1;
+}
+.stat-label{
+  font-size:10px;letter-spacing:2px;
+  color:var(--text-dim);text-transform:uppercase;
+  margin-top:4px;font-weight:500;
+}
+
+/* ── RIGHT PANEL / FORM ── */
+.right{
+  padding:60px 40px 60px 48px;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;
+}
+.right::before{
+  content:'';position:absolute;
+  top:0;bottom:0;left:0;width:1px;
+  background:linear-gradient(to bottom,transparent,rgba(245,197,24,0.2) 30%,rgba(245,197,24,0.2) 70%,transparent);
+}
+
+.form-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--yellow);margin-bottom:8px;
+}
+.form-sub{
+  font-size:14px;color:var(--text-dim);
+  font-weight:300;margin-bottom:36px;line-height:1.5;
+}
+
+/* ── FIELDS ── */
+.field{margin-bottom:16px}
+.field label{
+  display:flex;align-items:center;gap:8px;
+  font-size:10px;letter-spacing:2.5px;
+  color:rgba(245,245,245,0.3);
+  text-transform:uppercase;font-weight:600;
+  margin-bottom:8px;
+}
+.field label::before{content:'';width:16px;height:1px;background:rgba(245,197,24,0.4)}
+.field input{
+  width:100%;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.07);
+  border-bottom:1px solid rgba(245,197,24,0.25);
+  color:var(--white);
+  padding:14px 0;
+  font-size:15px;font-family:'Barlow',sans-serif;font-weight:400;
+  outline:none;
+  transition:all 0.2s;
+  border-radius:0;
+  -webkit-appearance:none;
+}
+.field input::placeholder{color:rgba(245,245,245,0.18)}
+.field input:focus{
+  border-bottom-color:var(--yellow);
+  background:rgba(245,197,24,0.03);
+}
+
+/* ── SUBMIT ── */
+.submit-wrap{position:relative;margin-top:8px}
+.submit{
+  width:100%;
+  background:var(--yellow);
+  border:none;color:var(--black);
+  padding:18px 24px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:17px;font-weight:900;
+  letter-spacing:4px;text-transform:uppercase;
+  cursor:pointer;
+  transition:all 0.15s;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  position:relative;overflow:hidden;
+}
+.submit::before{
+  content:'';
+  position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:rgba(255,255,255,0.15);
+  transition:left 0.3s ease;
+  transform:skewX(-15deg);
+}
+.submit:hover::before{left:120%}
+.submit:hover{background:#f7ce2a;transform:translateY(-1px)}
+.submit:active{transform:translateY(0)}
+.submit-arrow{font-size:20px;transition:transform 0.2s}
+.submit:hover .submit-arrow{transform:translateX(4px)}
+
+/* ── FINE PRINT ── */
+.fine{
+  display:flex;align-items:flex-start;gap:10px;
+  margin-top:20px;
+  font-size:11px;color:rgba(245,245,245,0.2);
+  line-height:1.5;
+}
+.fine::before{content:'🔒';font-size:10px;flex-shrink:0;margin-top:1px}
+
+/* ── SUCCESS ── */
+.success{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px;
+  animation:fadeUp 0.5s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.success-icon{
+  width:72px;height:72px;
+  background:var(--yellow);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;margin-bottom:24px;
+}
+.success h2{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:48px;font-weight:900;
+  letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:12px;
+}
+.success p{color:var(--text-dim);font-size:14px;line-height:1.6;max-width:280px}
+
+/* ── BOTTOM BAR ── */
+.bottom{
+  position:fixed;bottom:0;left:0;right:0;z-index:10;
+  background:var(--gray);
+  border-top:1px solid var(--mid);
+  padding:12px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.bottom-left{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;letter-spacing:3px;
+  color:rgba(245,245,245,0.2);text-transform:uppercase;
+}
+.bottom-right{
+  font-size:10px;color:rgba(245,245,245,0.15);
+  letter-spacing:1px;
+}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .wrap{grid-template-columns:1fr;padding-bottom:60px}
+  .diagonal{display:none}
+  .left{padding:40px 24px 32px}
+  .right{padding:0 24px 40px}
+  .right::before{display:none}
+  .stats{gap:20px}
+  .bottom{padding:12px 24px}
+}
+</style>
+</head>
+<body>
+<div class="diagonal"></div>
+<div class="wrap">
+
+  <!-- LEFT -->
+  <div class="left">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 3L4 14H12L11 21L20 10H12L13 3Z" fill="#0a0a0a" stroke="#0a0a0a" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">NXT <span>HOUSE</span></div>
+    </div>
+
+    <div class="badge"><span class="badge-dot"></span>Pioneiros Hyrox no Brasil</div>
+
+    <div class="headline">
+      <span class="out">Treina</span>
+      <span class="acc">Com os</span>
+      Melhores
+    </div>
+
+    <p class="body-text">
+      A NXT House é o <strong>primeiro box Hyrox do Brasil</strong>. CrossFit, Muay Thai e Hyrox no coração da Vila Olímpia. Entre na lista VIP e tenha acesso prioritário a novas aulas, eventos e vagas antes de todo mundo.
+    </p>
+
+    <div class="stats">
+      <div>
+        <div class="stat-num">5.0★</div>
+        <div class="stat-label">Google</div>
+      </div>
+      <div>
+        <div class="stat-num">21K</div>
+        <div class="stat-label">Seguidores</div>
+      </div>
+      <div>
+        <div class="stat-num">#1</div>
+        <div class="stat-label">Hyrox SP</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT / FORM -->
+  <div class="right">
+    <div id="form-section">
+      <div class="form-title">Lista VIP</div>
+      <div class="form-sub">Acesso antecipado. Vagas limitadas. Sem spam.</div>
+
+      <div class="field">
+        <label>Seu nome</label>
+        <input type="text" id="name" placeholder="Nome completo" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>WhatsApp</label>
+        <input type="tel" id="phone" placeholder="+55 11 99999-9999" autocomplete="off">
+      </div>
+
+      <div class="submit-wrap">
+        <button class="submit" onclick="handleSubmit()">
+          Entrar na Lista
+          <span class="submit-arrow">→</span>
+        </button>
+      </div>
+
+      <div class="fine">Seus dados ficam apenas com a NXT House. Nunca compartilhados com terceiros.</div>
+    </div>
+
+    <div class="success" id="success-section">
+      <div class="success-icon">⚡</div>
+      <h2>Você está dentro.</h2>
+      <p>Bem-vindo à lista VIP da NXT House. Vamos entrar em contato pelo WhatsApp em breve.</p>
+    </div>
+  </div>
+</div>
+
+<div class="bottom">
+  <div class="bottom-left">Hyrox · CrossFit · Muay Thai · Vila Olímpia</div>
+  <div class="bottom-right">Rise Above Media UK</div>
+</div>
+
+<script>
+function handleSubmit(){
+  const name=document.getElementById('name').value.trim();
+  const phone=document.getElementById('phone').value.trim();
+  if(!name){highlight('name');return}
+  if(!phone){highlight('phone');return}
+  // TODO: replace with your Make.com webhook URL
+  // fetch('YOUR_WEBHOOK_URL',{method:'POST',body:JSON.stringify({name,phone,business:'NXT House',ts:new Date().toISOString()})})
+  console.log('Lead captured:',{name,phone,business:'NXT House',ts:new Date().toISOString()});
+  document.getElementById('form-section').style.display='none';
+  const s=document.getElementById('success-section');
+  s.style.display='flex';
+}
+function highlight(id){
+  const el=document.getElementById(id);
+  el.style.borderBottomColor='#e05050';
+  el.focus();
+  setTimeout(()=>el.style.borderBottomColor='',2000);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter')handleSubmit()});
+</script>
+</body>
+</html>

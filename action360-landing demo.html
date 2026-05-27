@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Action 360° — Agende sua Aula Experimental</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#e63329;
+  --black:#111111;
+  --white:#ffffff;
+  --offwhite:#f8f7f5;
+  --light:#f2f0ed;
+  --border:#e8e4df;
+  --text:#2a2a2a;
+  --text-dim:#8a8a8a;
+  --text-light:#b0aca6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow-x:hidden}
+body{background:var(--white);color:var(--text);font-family:'Lato',sans-serif;min-height:100vh}
+
+/* ── LAYOUT ── */
+.wrap{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+
+/* ── LEFT — IMAGE/BRAND PANEL ── */
+.left{
+  background:var(--black);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:48px;
+  min-height:100vh;
+}
+
+/* Abstract geometric shapes */
+.geo{position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden}
+.geo-circle{
+  position:absolute;width:500px;height:500px;border-radius:50%;
+  border:1px solid rgba(230,51,41,0.15);
+  top:-100px;left:-150px;
+}
+.geo-circle-2{
+  position:absolute;width:300px;height:300px;border-radius:50%;
+  border:1px solid rgba(230,51,41,0.1);
+  top:50px;left:-50px;
+}
+.geo-bar{
+  position:absolute;top:0;right:0;width:3px;height:40%;
+  background:linear-gradient(to bottom,transparent,var(--red),transparent);
+}
+.geo-corner{
+  position:absolute;bottom:0;right:0;width:200px;height:200px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  border-left:1px solid rgba(255,255,255,0.06);
+}
+.geo-dots{
+  position:absolute;top:40%;right:40px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  opacity:0.15;
+}
+.dot{width:4px;height:4px;border-radius:50%;background:white}
+
+/* Left content */
+.brand-tag{
+  position:absolute;top:48px;left:48px;
+  font-family:'Montserrat',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:4px;
+  color:rgba(255,255,255,0.4);text-transform:uppercase;
+}
+.brand-logo{
+  font-family:'Montserrat',sans-serif;
+  font-size:42px;font-weight:800;
+  letter-spacing:-1px;line-height:1;
+  color:var(--white);margin-bottom:12px;
+}
+.brand-logo span{color:var(--red)}
+.brand-tagline{
+  font-family:'Lato',sans-serif;
+  font-size:13px;font-weight:300;letter-spacing:1px;
+  color:rgba(255,255,255,0.4);margin-bottom:40px;
+  text-transform:uppercase;
+}
+.brand-line{width:40px;height:2px;background:var(--red);margin-bottom:28px}
+.brand-desc{
+  font-size:15px;font-weight:300;
+  color:rgba(255,255,255,0.55);
+  line-height:1.75;max-width:340px;
+  margin-bottom:40px;
+}
+.brand-desc strong{color:rgba(255,255,255,0.85);font-weight:400}
+
+/* Modality pills */
+.modalities{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
+.mod{
+  border:1px solid rgba(255,255,255,0.12);
+  padding:6px 14px;
+  font-size:10px;letter-spacing:2px;font-weight:600;
+  color:rgba(255,255,255,0.45);text-transform:uppercase;
+}
+.mod.active{border-color:var(--red);color:var(--red)}
+
+/* Review */
+.review{
+  display:flex;align-items:center;gap:14px;
+  padding:16px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+}
+.review-stars{color:var(--red);font-size:13px;letter-spacing:2px}
+.review-text{font-size:12px;color:rgba(255,255,255,0.35);line-height:1.4}
+.review-text strong{color:rgba(255,255,255,0.6);font-weight:400}
+
+/* ── RIGHT — FORM PANEL ── */
+.right{
+  background:var(--offwhite);
+  padding:60px 56px;
+  display:flex;flex-direction:column;
+  justify-content:center;
+}
+
+/* Top nav line */
+.nav-line{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:56px;
+}
+.nav-logo{
+  font-family:'Montserrat',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:2px;
+  color:var(--text);
+}
+.nav-logo span{color:var(--red)}
+.nav-link{
+  font-size:11px;letter-spacing:1px;
+  color:var(--text-dim);text-decoration:none;
+}
+
+/* Form header */
+.form-eyebrow{
+  font-size:11px;letter-spacing:3px;font-weight:700;
+  color:var(--red);text-transform:uppercase;
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.form-eyebrow::before{content:'';width:24px;height:2px;background:var(--red)}
+.form-title{
+  font-family:'Montserrat',sans-serif;
+  font-size:clamp(28px,3.5vw,38px);
+  font-weight:800;line-height:1.15;
+  color:var(--black);margin-bottom:10px;letter-spacing:-0.5px;
+}
+.form-title em{color:var(--red);font-style:normal}
+.form-sub{
+  font-size:14px;color:var(--text-dim);
+  font-weight:300;line-height:1.6;
+  margin-bottom:40px;
+}
+
+/* Fields */
+.field{margin-bottom:20px}
+.field label{
+  display:block;
+  font-size:10px;letter-spacing:2px;font-weight:700;
+  color:var(--text-dim);text-transform:uppercase;
+  margin-bottom:8px;
+}
+.field input{
+  width:100%;
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:2px;
+  color:var(--black);
+  padding:15px 18px;
+  font-size:14px;font-family:'Lato',sans-serif;
+  outline:none;
+  transition:all 0.2s;
+  -webkit-appearance:none;
+}
+.field input::placeholder{color:var(--text-light)}
+.field input:focus{
+  border-color:var(--red);
+  box-shadow:0 0 0 3px rgba(230,51,41,0.06);
+}
+
+/* CTA */
+.submit{
+  width:100%;
+  background:var(--red);
+  border:none;color:var(--white);
+  padding:17px 24px;
+  font-family:'Montserrat',sans-serif;
+  font-size:13px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  cursor:pointer;border-radius:2px;
+  transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-top:4px;
+}
+.submit:hover{background:#cc2d24;transform:translateY(-1px);box-shadow:0 8px 24px rgba(230,51,41,0.25)}
+.submit:active{transform:translateY(0);box-shadow:none}
+.arrow{transition:transform 0.2s}
+.submit:hover .arrow{transform:translateX(4px)}
+
+/* Trust */
+.trust{
+  display:flex;gap:24px;margin-top:24px;
+  padding-top:24px;border-top:1px solid var(--border);
+  flex-wrap:wrap;
+}
+.trust-item{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;color:var(--text-dim);letter-spacing:0.3px;
+}
+.trust-item::before{
+  content:'✓';
+  width:16px;height:16px;
+  background:rgba(230,51,41,0.08);
+  border-radius:50%;
+  color:var(--red);font-size:9px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+
+/* Hours */
+.hours{
+  margin-top:32px;padding:16px 18px;
+  background:var(--light);
+  border-left:2px solid var(--red);
+  font-size:12px;color:var(--text-dim);line-height:1.7;
+}
+.hours strong{color:var(--text);font-weight:600;display:block;margin-bottom:4px;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+
+/* Success */
+.success{
+  display:none;text-align:center;
+  animation:fadeIn 0.4s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.success-check{
+  width:64px;height:64px;background:var(--red);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 24px;font-size:26px;color:white;
+}
+.success h2{
+  font-family:'Montserrat',sans-serif;
+  font-size:28px;font-weight:800;color:var(--black);
+  letter-spacing:-0.5px;margin-bottom:12px;
+}
+.success p{font-size:14px;color:var(--text-dim);line-height:1.6;max-width:300px;margin:0 auto}
+
+/* Footer */
+.footer{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--white);border-top:1px solid var(--border);
+  padding:12px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  z-index:10;
+}
+.footer-left{font-size:10px;color:var(--text-light);letter-spacing:1px}
+.footer-right{font-size:10px;color:var(--text-light)}
+
+/* Mobile */
+@media(max-width:900px){
+  .wrap{grid-template-columns:1fr}
+  .left{min-height:auto;padding:40px 28px 40px}
+  .brand-logo{font-size:32px}
+  .right{padding:40px 28px 60px}
+  .nav-line{margin-bottom:36px}
+  .footer{padding:12px 28px}
+}
+@media(max-width:500px){
+  .trust{gap:14px}
+  .modalities{gap:6px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- LEFT BRAND PANEL -->
+  <div class="left">
+    <div class="geo">
+      <div class="geo-circle"></div>
+      <div class="geo-circle-2"></div>
+      <div class="geo-bar"></div>
+      <div class="geo-corner"></div>
+      <div class="geo-dots">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+    </div>
+
+    <div class="brand-tag">Vila Olímpia · São Paulo</div>
+
+    <div class="brand-logo">ACTION <span>360°</span></div>
+    <div class="brand-tagline">Pilates · Funcional · Eletroestimulação</div>
+    <div class="brand-line"></div>
+
+    <p class="brand-desc">
+      A experiência Action 360° <strong>não se explica, se sente.</strong> Turmas com no máximo 3 alunos por professor. Atenção exclusiva. Resultados reais.
+    </p>
+
+    <div class="modalities">
+      <div class="mod active">Pilates</div>
+      <div class="mod active">Funcional</div>
+      <div class="mod active">Eletroestimulação</div>
+      <div class="mod">Massagem</div>
+    </div>
+
+    <div class="review">
+      <div>
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text"><strong>4.9 no Google</strong> · Mais de 130 avaliações</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT FORM PANEL -->
+  <div class="right">
+    <div class="nav-line">
+      <div class="nav-logo">ACTION <span>360°</span></div>
+      <div class="nav-link">action360.com.br</div>
+    </div>
+
+    <div id="form-section">
+      <div class="form-eyebrow">Primeira aula</div>
+      <div class="form-title">Reserve sua<br><em>Aula Gratuita</em></div>
+      <div class="form-sub">Sem compromisso. Nossa equipe entrará em contato pelo WhatsApp para confirmar seu horário.</div>
+
+      <div class="field">
+        <label>Nome completo</label>
+        <input type="text" id="name" placeholder="Como prefere ser chamado?" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>WhatsApp</label>
+        <input type="tel" id="phone" placeholder="+55 11 99999-9999" autocomplete="off">
+      </div>
+
+      <button class="submit" onclick="handleSubmit()">
+        Garantir Minha Aula Grátis
+        <span class="arrow">→</span>
+      </button>
+
+      <div class="trust">
+        <div class="trust-item">Sem cartão de crédito</div>
+        <div class="trust-item">Sem compromisso</div>
+        <div class="trust-item">Resposta em até 2h</div>
+      </div>
+
+      <div class="hours">
+        <strong>Horários</strong>
+        Segunda a Sexta: 05h30 – 22h30 &nbsp;·&nbsp; Sábado: 07h30 – 14h30
+      </div>
+    </div>
+
+    <div class="success" id="success-section">
+      <div class="success-check">✓</div>
+      <h2>Reserva confirmada.</h2>
+      <p>Entraremos em contato pelo WhatsApp em até 2 horas para agendar seu horário. Bem-vindo à Action 360°.</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-left">Alameda Raja Gabaglia, 147 · Vila Olímpia · São Paulo</div>
+  <div class="footer-right">Rise Above Media UK</div>
+</div>
+
+<script>
+function handleSubmit(){
+  const name=document.getElementById('name').value.trim();
+  const phone=document.getElementById('phone').value.trim();
+  if(!name){highlight('name');return}
+  if(!phone){highlight('phone');return}
+  // TODO: replace with your Make.com webhook URL
+  // fetch('YOUR_WEBHOOK_URL',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,business:'Action 360',ts:new Date().toISOString()})})
+  console.log('Lead captured:',{name,phone,business:'Action 360',ts:new Date().toISOString()});
+  document.getElementById('form-section').style.display='none';
+  const s=document.getElementById('success-section');
+  s.style.display='block';
+}
+function highlight(id){
+  const el=document.getElementById(id);
+  el.style.borderColor='var(--red)';
+  el.style.boxShadow='0 0 0 3px rgba(230,51,41,0.12)';
+  el.focus();
+  setTimeout(()=>{el.style.borderColor='';el.style.boxShadow=''},2500);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter')handleSubmit()});
+</script>
+</body>
+</html>
